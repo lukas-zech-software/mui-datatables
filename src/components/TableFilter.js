@@ -141,7 +141,7 @@ class TableFilter extends React.PureComponent {
   };
 
   handleDropdownChange = (index, value) => {
-    const value = event.target.value  === this.props.options.textLabels.filter.all ? "" : event.target.value ;
+    value = event.target.value === this.props.options.textLabels.filter.all ? '' : event.target.value;
     this.props.onFilterUpdate(index, value, 'dropdown');
   };
 
@@ -212,14 +212,14 @@ class TableFilter extends React.PureComponent {
         <Select
           value={filterValues.toString() || textLabels.all}
           name={column.name}
-          onChange={event => this.handleDropdownChange(event.target.value,index)}
+          onChange={event => this.handleDropdownChange(event.target.value, index)}
           input={<Input name={column.name} id={column.name} />}>
           <MenuItem value={textLabels.all} key={0}>
             {textLabels.all}
           </MenuItem>
           {filterData[index].map((filterColumn, filterIndex) => (
             <MenuItem value={filterColumn} key={filterIndex + 1}>
-              {filterColumn !== null ? filterColumn.toString() : ""}
+              {filterColumn !== null ? filterColumn.toString() : ''}
             </MenuItem>
           ))}
         </Select>
@@ -277,7 +277,7 @@ class TableFilter extends React.PureComponent {
         <Select
           multiple
           value={filterValues || []}
-          renderValue={selected => selected.join(", ")}
+          renderValue={selected => selected.join(', ')}
           name={column.name}
           onChange={event => this.handleMultiselectChange(index, event.target.value)}
           input={<Input name={column.name} id={column.name} />}>
@@ -312,11 +312,11 @@ class TableFilter extends React.PureComponent {
 
   renderFilters(type, columns) {
     switch (type) {
-      case "checkbox":
+      case 'checkbox':
         return this.renderCheckbox(columns);
-      case "multiselect":
+      case 'multiselect':
         return this.renderMultiselect(columns);
-        case "textField":
+      case 'textField':
         return this.renderTextField(columns);
       default:
         return this.renderSelect(columns);

@@ -36,7 +36,7 @@ class TableFilterList extends React.Component {
               <Chip
                 label={data}
                 key={colIndex}
-                onDelete={filterUpdate.bind(null, index, data.props.rawValue, "checkbox")}
+                onDelete={filterUpdate.bind(null, index, data.props.rawValue, 'checkbox')}
                 className={classes.chip}
               />
             );
