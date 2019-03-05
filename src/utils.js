@@ -76,4 +76,18 @@ function createCSVDownload(columns, data, options) {
   }
 }
 
-export { buildMap, getCollatorComparator, sortCompare, createCSVDownload };
+
+  function getFilterListValue (x) {
+    if (typeof x === 'string') {
+      return x;
+    }
+    if (typeof x === 'object') {
+      if (x.props) {
+        return x.props.rawValue;
+      }
+    }
+console.log('x', x);
+    return undefined;
+  }
+
+export { buildMap, getCollatorComparator, sortCompare, createCSVDownload,getFilterListValue };

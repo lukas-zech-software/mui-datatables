@@ -14,6 +14,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 import {withStyles} from '@material-ui/core/styles';
 import {TextField} from '@material-ui/core';
+import {getFilterListValue} from "../utils";
 
 export const defaultFilterStyles = theme => ({
   root: {
@@ -135,8 +136,8 @@ class TableFilter extends React.PureComponent {
   };
 
   handleDropdownChange = (index, value) => {
-    const value = event.target.value === this.props.options.textLabels.filter.all ? "" : event.target.value;
-    this.props.onFilterUpdate(index, value, 'dropdown');
+    const v = value === this.props.options.textLabels.filter.all ? "" : value;
+    this.props.onFilterUpdate(index, v, 'dropdown');
   };
 
   handleMultiselectChange = (index, column) => {
@@ -190,7 +191,7 @@ class TableFilter extends React.PureComponent {
   renderSelectItem(column, index) {
     const {classes, filterData, filterList, options} = this.props;
     const textLabels = options.textLabels.filter;
-    const filterValues = filterList[index].map(x => (x ? x.props.rawValue : undefined));
+    const filterValues = filterList[index].map(getFilterListValue);
 
     if (column.customFilterRender) {
       return column.customFilterRender(
@@ -206,7 +207,7 @@ class TableFilter extends React.PureComponent {
         <Select
           value={filterValues.toString() || textLabels.all}
           name={column.name}
-          onChange={event => this.handleDropdownChange(event.target.value, index)}
+          onChange={event => this.handleDropdownChange(index, event.target.value)}
           input={<Input name={column.name} id={column.name}/>}>
           <MenuItem value={textLabels.all} key={0}>
             {textLabels.all}
@@ -255,7 +256,7 @@ class TableFilter extends React.PureComponent {
 
   renderMultiselectItem(column, index) {
     const {classes, filterData, filterList} = this.props;
-    const filterValues = filterList[index].map(x => (x ? x.props.rawValue : undefined));
+    const filterValues = filterList[index].map(getFilterListValue);
 
     if (column.customFilterRender) {
       return column.customFilterRender(

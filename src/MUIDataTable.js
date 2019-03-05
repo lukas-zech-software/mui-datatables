@@ -14,7 +14,7 @@ import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
 import textLabels from './textLabels';
 import {withStyles} from '@material-ui/core/styles';
-import {buildMap, getCollatorComparator, sortCompare} from './utils';
+import {buildMap, getCollatorComparator, getFilterListValue, sortCompare} from './utils';
 
 const defaultTableStyles = {
   root: {},
@@ -471,16 +471,7 @@ class MUIDataTable extends React.Component {
 
       displayRow.push(columnDisplay);
 
-      const filterValues = filterList[index].map(x => (x ? x.props.rawValue : undefined));
-      const {caseSensitive} = this.options;
-
-      if (
-        filterValues &&
-        this.hasSearchText(columnValue, searchText, caseSensitive) &&
-        columns[index].display !== 'false'
-      ) {
-        isFiltered = true;
-      }
+      const filterValues = filterList[index].map(getFilterListValue);
 
       if (this.filterValue(filterValues, columnValue, columns[index])) {
         isFiltered = true;
@@ -504,13 +495,17 @@ class MUIDataTable extends React.Component {
       if (filterType === 'textField' && !this.hasSearchText(columnValue, filterValues, caseSensitive)) {
         return true;
       }
+
+      if (columnOptions.display !== 'false') {
+        return true;
+      }
     }
 
     return filterValues.length && filterValues.indexOf(columnValue) < 0;
   }
 
-  hasSearchText = (toSearch, toFind, caseSensitive) => {
-    let stack = toSearch.toString();
+  hasSearchText = (toSearch = '', toFind = '', caseSensitive) => {
+      let stack = toSearch.toString();
     let needle = toFind.toString();
 
     if (!caseSensitive) {
@@ -821,7 +816,7 @@ class MUIDataTable extends React.Component {
   };
 
   toggleExpandRow = row => {
-    const { dataIndex } = row;
+    const {dataIndex} = row;
     let expandedRows = [...this.state.expandedRows.data];
     let rowPos = -1;
 
