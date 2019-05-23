@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -11,11 +12,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
-import { withStyles } from '@material-ui/core/styles';
-import { TextField } from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import {TextField} from '@material-ui/core';
+import {getFilterListValue} from "../utils";
 
-export const defaultFilterStyles = {
+export const defaultFilterStyles = theme => ({
   root: {
+    backgroundColor: theme.palette.background.default,
     padding: '16px 24px 16px 24px',
     fontFamily: 'Roboto',
   },
@@ -29,7 +32,7 @@ export const defaultFilterStyles = {
   title: {
     display: 'inline-block',
     marginLeft: '7px',
-    color: '#424242',
+    color: theme.palette.text.primary,
     fontSize: '14px',
     fontWeight: 500,
   },
@@ -40,16 +43,9 @@ export const defaultFilterStyles = {
     alignSelf: 'left',
   },
   resetLink: {
-    color: '#027cb5',
-    backgroundColor: '#FFF',
-    display: 'inline-block',
-    marginLeft: '24px',
+    marginLeft: '16px',
     fontSize: '12px',
     cursor: 'pointer',
-    border: 'none',
-    '&:hover': {
-      color: '#FF0000',
-    },
   },
   filtersSelected: {
     alignSelf: 'right',
@@ -64,7 +60,7 @@ export const defaultFilterStyles = {
     marginLeft: '7px',
     marginBottom: '8px',
     fontSize: '14px',
-    color: '#424242',
+    color: theme.palette.text.secondary,
     textAlign: 'left',
     fontWeight: 500,
   },
@@ -77,16 +73,15 @@ export const defaultFilterStyles = {
   checkboxFormControlLabel: {
     fontSize: '15px',
     marginLeft: '8px',
-    color: '#4a4a4a',
+    color: theme.palette.text.primary,
   },
   checkboxIcon: {
-    //color: "#027cb5",
     width: '32px',
     height: '32px',
   },
   checkbox: {
     '&$checked': {
-      color: '#027cB5',
+      color: theme.palette.primary.main,
     },
   },
   checked: {},
@@ -118,7 +113,7 @@ export const defaultFilterStyles = {
     marginRight: '24px',
     marginBottom: '24px',
   },
-};
+});
 
 class TableFilter extends React.PureComponent {
   static propTypes = {
@@ -141,8 +136,8 @@ class TableFilter extends React.PureComponent {
   };
 
   handleDropdownChange = (index, value) => {
-    value = event.target.value === this.props.options.textLabels.filter.all ? '' : event.target.value;
-    this.props.onFilterUpdate(index, value, 'dropdown');
+    const v = value === this.props.options.textLabels.filter.all ? "" : value;
+    this.props.onFilterUpdate(index, v, 'dropdown');
   };
 
   handleMultiselectChange = (index, column) => {
@@ -154,14 +149,14 @@ class TableFilter extends React.PureComponent {
   };
 
   renderCheckbox(columns) {
-    const { classes, filterData, filterList } = this.props;
+    const {classes, filterData, filterList} = this.props;
 
     return columns.map((column, index) =>
       column.filter ? (
         <div className={classes.checkboxList} key={index}>
           <FormGroup>
-            <Typography variant="caption" className={classes.checkboxListTitle}>
-              {column.name}
+            <Typography variant="body2" className={classes.checkboxListTitle}>
+              {column.label}
             </Typography>
             {filterData[index].map((filterColumn, filterIndex) => (
               <FormControlLabel
@@ -179,7 +174,7 @@ class TableFilter extends React.PureComponent {
                       root: classes.checkbox,
                       checked: classes.checked,
                     }}
-                    value={filterColumn !== null ? filterColumn.toString() : ''}
+                    value={filterColumn != null ? filterColumn.toString() : ''}
                   />
                 }
                 label={filterColumn}
@@ -194,9 +189,9 @@ class TableFilter extends React.PureComponent {
   }
 
   renderSelectItem(column, index) {
-    const { classes, filterData, filterList, options } = this.props;
+    const {classes, filterData, filterList, options} = this.props;
     const textLabels = options.textLabels.filter;
-    const filterValues = filterList[index].map(x => (x ? x.props.rawValue : undefined));
+    const filterValues = filterList[index].map(getFilterListValue);
 
     if (column.customFilterRender) {
       return column.customFilterRender(
@@ -208,18 +203,18 @@ class TableFilter extends React.PureComponent {
 
     return (
       <FormControl className={classes.selectFormControl} key={index}>
-        <InputLabel htmlFor={column.name}>{column.name}</InputLabel>
+        <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
         <Select
           value={filterValues.toString() || textLabels.all}
           name={column.name}
-          onChange={event => this.handleDropdownChange(event.target.value, index)}
-          input={<Input name={column.name} id={column.name} />}>
+          onChange={event => this.handleDropdownChange(index, event.target.value)}
+          input={<Input name={column.name} id={column.name}/>}>
           <MenuItem value={textLabels.all} key={0}>
             {textLabels.all}
           </MenuItem>
           {filterData[index].map((filterColumn, filterIndex) => (
             <MenuItem value={filterColumn} key={filterIndex + 1}>
-              {filterColumn !== null ? filterColumn.toString() : ''}
+              {filterColumn !== null ? filterColumn.toString() : ""}
             </MenuItem>
           ))}
         </Select>
@@ -228,7 +223,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderSelect(columns) {
-    const { classes } = this.props;
+    const {classes} = this.props;
 
     return (
       <div className={classes.selectRoot}>
@@ -238,7 +233,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderTextField(columns) {
-    const { classes, filterList } = this.props;
+    const {classes, filterList} = this.props;
 
     return (
       <div className={classes.textFieldRoot}>
@@ -260,8 +255,8 @@ class TableFilter extends React.PureComponent {
   }
 
   renderMultiselectItem(column, index) {
-    const { classes, filterData, filterList } = this.props;
-    const filterValues = filterList[index].map(x => (x ? x.props.rawValue : undefined));
+    const {classes, filterData, filterList} = this.props;
+    const filterValues = filterList[index].map(getFilterListValue);
 
     if (column.customFilterRender) {
       return column.customFilterRender(
@@ -273,14 +268,14 @@ class TableFilter extends React.PureComponent {
 
     return (
       <FormControl className={classes.selectFormControl} key={index}>
-        <InputLabel htmlFor={column.name}>{column.name}</InputLabel>
+        <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
         <Select
           multiple
           value={filterValues || []}
-          renderValue={selected => selected.join(', ')}
+          renderValue={selected => selected.join(", ")}
           name={column.name}
           onChange={event => this.handleMultiselectChange(index, event.target.value)}
-          input={<Input name={column.name} id={column.name} />}>
+          input={<Input name={column.name} id={column.name}/>}>
           {filterData[index].map((filterColumn, filterIndex) => (
             <MenuItem value={filterColumn} key={filterIndex + 1}>
               <Checkbox
@@ -292,7 +287,7 @@ class TableFilter extends React.PureComponent {
                   checked: classes.checked,
                 }}
               />
-              <ListItemText primary={filterColumn} />
+              <ListItemText primary={filterColumn}/>
             </MenuItem>
           ))}
         </Select>
@@ -301,7 +296,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderMultiselect(columns) {
-    const { classes } = this.props;
+    const {classes} = this.props;
 
     return (
       <div className={classes.selectRoot}>
@@ -312,11 +307,11 @@ class TableFilter extends React.PureComponent {
 
   renderFilters(type, columns) {
     switch (type) {
-      case 'checkbox':
+      case "checkbox":
         return this.renderCheckbox(columns);
-      case 'multiselect':
+      case "multiselect":
         return this.renderMultiselect(columns);
-      case 'textField':
+      case "textField":
         return this.renderTextField(columns);
       default:
         return this.renderSelect(columns);
@@ -324,7 +319,7 @@ class TableFilter extends React.PureComponent {
   }
 
   render() {
-    const { classes, columns, options, onFilterReset } = this.props;
+    const {classes, columns, options, onFilterReset} = this.props;
     const textLabels = options.textLabels.filter;
 
     return (
@@ -332,18 +327,23 @@ class TableFilter extends React.PureComponent {
         <div className={classes.header}>
           <div className={classes.reset}>
             <Typography
-              variant="caption"
+              variant="body2"
               className={classNames({
                 [classes.title]: true,
                 [classes.noMargin]: options.filterType !== 'checkbox' ? true : false,
               })}>
               {textLabels.title}
             </Typography>
-            <button className={classes.resetLink} tabIndex={0} aria-label={textLabels.reset} onClick={onFilterReset}>
+            <Button
+              color="primary"
+              className={classes.resetLink}
+              tabIndex={0}
+              aria-label={textLabels.reset}
+              onClick={onFilterReset}>
               {textLabels.reset}
-            </button>
+            </Button>
           </div>
-          <div className={classes.filtersSelected} />
+          <div className={classes.filtersSelected}/>
         </div>
         {this.renderFilters(options.filterType, columns)}
       </div>
@@ -351,4 +351,4 @@ class TableFilter extends React.PureComponent {
   }
 }
 
-export default withStyles(defaultFilterStyles, { name: 'MUIDataTableFilter' })(TableFilter);
+export default withStyles(defaultFilterStyles, {name: 'MUIDataTableFilter'})(TableFilter);
