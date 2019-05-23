@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/core/styles';
-import {getFilterListValue} from "../utils";
+import { getFilterListValue } from '../utils';
 
 const defaultFilterListStyles = {
   root: {
@@ -37,7 +37,7 @@ class TableFilterList extends React.Component {
               <Chip
                 label={data}
                 key={colIndex}
-                onDelete={filterUpdate.bind(null, index, getFilterListValue, "checkbox")}
+                onDelete={filterUpdate.bind(null, index, getFilterListValue, 'checkbox')}
                 className={classes.chip}
               />
             );

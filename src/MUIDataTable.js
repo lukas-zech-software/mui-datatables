@@ -13,8 +13,8 @@ import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
 import textLabels from './textLabels';
-import {withStyles} from '@material-ui/core/styles';
-import {buildMap, getCollatorComparator, getFilterListValue, sortCompare} from './utils';
+import { withStyles } from '@material-ui/core/styles';
+import { buildMap, getCollatorComparator, getFilterListValue, sortCompare } from './utils';
 
 const defaultTableStyles = {
   root: {},
@@ -155,10 +155,8 @@ class MUIDataTable extends React.Component {
     this.tableRef = false;
     this.tableContent = React.createRef();
     this.headCellRefs = {};
-    this.setHeadResizeable = () => {
-    };
-    this.updateDividers = () => {
-    };
+    this.setHeadResizeable = () => {};
+    this.updateDividers = () => {};
   }
 
   componentWillMount() {
@@ -266,20 +264,18 @@ class MUIDataTable extends React.Component {
 
   rawColumns = cols => {
     return cols.map(item => {
-      if (typeof item !== "object") {
+      if (typeof item !== 'object') {
         return item;
       }
-      ;
-
       let otherOptions = {};
-      const {options, ...otherProps} = item;
+      const { options, ...otherProps } = item;
 
       if (options) {
-        const {customHeadRender, customBodyRender, setCellProps, ...nonFnOpts} = options;
+        const { customHeadRender, customBodyRender, setCellProps, ...nonFnOpts } = options;
         otherOptions = nonFnOpts;
       }
 
-      return {...otherOptions, ...otherProps};
+      return { ...otherOptions, ...otherProps };
     });
   };
 
@@ -293,8 +289,8 @@ class MUIDataTable extends React.Component {
     let filterList = [];
 
     if (this.state.columns.length && isEqual(this.rawColumns(newColumns), this.rawColumns(this.props.columns))) {
-      const {columns, filterList, filterData} = this.state;
-      return {columns, filterList, filterData};
+      const { columns, filterList, filterData } = this.state;
+      return { columns, filterList, filterData };
     }
 
     newColumns.forEach((column, colIndex) => {
@@ -319,7 +315,7 @@ class MUIDataTable extends React.Component {
           ...(column.options ? column.options : {}),
         };
       } else {
-        columnOptions = {...columnOptions, name: column, label: column};
+        columnOptions = { ...columnOptions, name: column, label: column };
       }
 
       columnData.push(columnOptions);
@@ -328,20 +324,19 @@ class MUIDataTable extends React.Component {
       filterList[colIndex] = [];
     });
 
-    return {columns: columnData, filterData, filterList};
+    return { columns: columnData, filterData, filterList };
   };
 
   transformData = props => {
-    const {data, columns} = props;
+    const { data, columns } = props;
     return Array.isArray(data[0]) ? data : data.map(row => columns.map(col => row[col.name]));
   };
 
-  setTableData(props, status, callback = () => {
-  }) {
-    const {options} = props;
+  setTableData(props, status, callback = () => {}) {
+    const { options } = props;
 
     let tableData = [];
-    let {columns, filterData, filterList} = this.buildColumns(props.columns);
+    let { columns, filterData, filterList } = this.buildColumns(props.columns);
     let sortIndex = null;
     let sortDirection = null;
 
@@ -398,7 +393,7 @@ class MUIDataTable extends React.Component {
     }
 
     if (filterList.length !== columns.length) {
-      throw new Error("Provided options.filterList does not match the column length");
+      throw new Error('Provided options.filterList does not match the column length');
     }
 
     let selectedRowsData = {
@@ -409,7 +404,7 @@ class MUIDataTable extends React.Component {
     if (TABLE_LOAD.INITIAL) {
       if (options.rowsSelected && options.rowsSelected.length) {
         options.rowsSelected.forEach(row => {
-          selectedRowsData.data.push({index: row, dataIndex: row});
+          selectedRowsData.data.push({ index: row, dataIndex: row });
           selectedRowsData.lookup[row] = true;
         });
       }
@@ -463,8 +458,8 @@ class MUIDataTable extends React.Component {
         /* drill down to get the value of a cell */
         columnValue =
           typeof funcResult === 'string'
-          ? funcResult
-          : funcResult.props && funcResult.props.value
+            ? funcResult
+            : funcResult.props && funcResult.props.value
             ? funcResult.props.value
             : columnValue;
       }
@@ -491,7 +486,7 @@ class MUIDataTable extends React.Component {
     }
 
     if (filterValues.length) {
-      const {filterType, caseSensitive} = this.options;
+      const { filterType, caseSensitive } = this.options;
       if (filterType === 'textField' && !this.hasSearchText(columnValue, filterValues, caseSensitive)) {
         return true;
       }
@@ -505,7 +500,7 @@ class MUIDataTable extends React.Component {
   }
 
   hasSearchText = (toSearch = '', toFind = '', caseSensitive) => {
-      let stack = toSearch.toString();
+    let stack = toSearch.toString();
     let needle = toFind.toString();
 
     if (!caseSensitive) {
@@ -525,9 +520,9 @@ class MUIDataTable extends React.Component {
       const funcResult = prevState.columns[index].customBodyRender(value, tableMeta);
 
       const filterValue =
-              React.isValidElement(funcResult) && funcResult.props.value
-              ? funcResult.props.value
-              : prevState['data'][row][index];
+        React.isValidElement(funcResult) && funcResult.props.value
+          ? funcResult.props.value
+          : prevState['data'][row][index];
 
       const prevFilterIndex = filterData[index].indexOf(filterValue);
       filterData[index].splice(prevFilterIndex, 1, filterValue);
@@ -548,7 +543,7 @@ class MUIDataTable extends React.Component {
   };
 
   getTableMeta = (rowIndex, colIndex, rowData, columnData, tableData, curState) => {
-    const {columns, data, displayData, filterData, ...tableState} = curState;
+    const { columns, data, displayData, filterData, ...tableState } = curState;
 
     return {
       rowIndex: rowIndex,
@@ -701,8 +696,8 @@ class MUIDataTable extends React.Component {
         searchText: text && text.length ? text : null,
         page: 0,
         displayData: this.options.serverSide
-                     ? prevState.displayData
-                     : this.getDisplayData(prevState.columns, prevState.data, prevState.filterList, text),
+          ? prevState.displayData
+          : this.getDisplayData(prevState.columns, prevState.data, prevState.filterList, text),
       }),
       () => {
         this.setTableAction('search');
@@ -718,8 +713,8 @@ class MUIDataTable extends React.Component {
         return {
           filterList: filterList,
           displayData: this.options.serverSide
-                       ? prevState.displayData
-                       : this.getDisplayData(prevState.columns, prevState.data, filterList, prevState.searchText),
+            ? prevState.displayData
+            : this.getDisplayData(prevState.columns, prevState.data, filterList, prevState.searchText),
         };
       },
       () => {
@@ -744,16 +739,17 @@ class MUIDataTable extends React.Component {
         const isFilterEmpty = !filterValue;
 
         switch (type) {
-          case "checkbox": {
-            const wrappedValue = React.createElement(FilterValue, {
-              children: renderFilterValue(filterValue),
-              // attach the raw input value, so we can retrieve it later
-              rawValue: filterValue,
-            });
-            filterPos >= 0 ? filterList[index].splice(filterPos, 1) : filterList[index].push(wrappedValue);
-          }
+          case 'checkbox':
+            {
+              const wrappedValue = React.createElement(FilterValue, {
+                children: renderFilterValue(filterValue),
+                // attach the raw input value, so we can retrieve it later
+                rawValue: filterValue,
+              });
+              filterPos >= 0 ? filterList[index].splice(filterPos, 1) : filterList[index].push(wrappedValue);
+            }
             break;
-          case "multiselect": {
+          case 'multiselect': {
             const wrappedValue = filterValue.map(x =>
               React.createElement(FilterValue, {
                 children: renderFilterValue(x),
@@ -777,8 +773,8 @@ class MUIDataTable extends React.Component {
         return {
           filterList: filterList,
           displayData: this.options.serverSide
-                       ? prevState.displayData
-                       : this.getDisplayData(prevState.columns, prevState.data, filterList, prevState.searchText),
+            ? prevState.displayData
+            : this.getDisplayData(prevState.columns, prevState.data, filterList, prevState.searchText),
         };
       },
       () => {
@@ -791,10 +787,10 @@ class MUIDataTable extends React.Component {
   };
 
   selectRowDelete = () => {
-    const {selectedRows, data, filterList} = this.state;
+    const { selectedRows, data, filterList } = this.state;
 
     const selectedMap = buildMap(selectedRows.data);
-    const cleanRows = data.filter(({index}) => !selectedMap[index]);
+    const cleanRows = data.filter(({ index }) => !selectedMap[index]);
 
     if (this.options.onRowsDelete) {
       this.options.onRowsDelete(selectedRows);
@@ -816,7 +812,7 @@ class MUIDataTable extends React.Component {
   };
 
   toggleExpandRow = row => {
-    const {dataIndex} = row;
+    const { dataIndex } = row;
     let expandedRows = [...this.state.expandedRows.data];
     let rowPos = -1;
 
@@ -848,19 +844,19 @@ class MUIDataTable extends React.Component {
 
   selectRowUpdate = (type, value) => {
     if (type === 'head') {
-      const {isRowSelectable} = this.options;
+      const { isRowSelectable } = this.options;
       this.setState(
         prevState => {
-          const {displayData} = prevState;
+          const { displayData } = prevState;
           const selectedRowsLen = prevState.selectedRows.data.length;
           const isDeselect =
-                  selectedRowsLen === displayData.length || (selectedRowsLen < displayData.length && selectedRowsLen > 0)
-                  ? true
-                  : false;
+            selectedRowsLen === displayData.length || (selectedRowsLen < displayData.length && selectedRowsLen > 0)
+              ? true
+              : false;
 
           let selectedRows = displayData.reduce((arr, d, i) => {
             const selected = isRowSelectable ? isRowSelectable(displayData[i].dataIndex) : true;
-            selected && arr.push({index: i, dataIndex: displayData[i].dataIndex});
+            selected && arr.push({ index: i, dataIndex: displayData[i].dataIndex });
             return arr;
           }, []);
 
@@ -868,7 +864,7 @@ class MUIDataTable extends React.Component {
           let selectedMap = buildMap(newRows);
 
           if (isDeselect) {
-            newRows = prevState.selectedRows.data.filter(({dataIndex}) => !selectedMap[dataIndex]);
+            newRows = prevState.selectedRows.data.filter(({ dataIndex }) => !selectedMap[dataIndex]);
             selectedMap = buildMap(newRows);
           }
 
@@ -890,7 +886,7 @@ class MUIDataTable extends React.Component {
     } else if (type === 'cell') {
       this.setState(
         prevState => {
-          const {index, dataIndex} = value;
+          const { index, dataIndex } = value;
           let selectedRows = [...prevState.selectedRows.data];
           let rowPos = -1;
 
@@ -922,14 +918,14 @@ class MUIDataTable extends React.Component {
         },
       );
     } else if (type === 'custom') {
-      const {displayData} = this.state;
+      const { displayData } = this.state;
 
-      const data = value.map(row => ({index: row, dataIndex: displayData[row].dataIndex}));
+      const data = value.map(row => ({ index: row, dataIndex: displayData[row].dataIndex }));
       const lookup = buildMap(data);
 
       this.setState(
         {
-          selectedRows: {data, lookup},
+          selectedRows: { data, lookup },
         },
         () => {
           this.setTableAction('rowsSelect');
@@ -944,14 +940,14 @@ class MUIDataTable extends React.Component {
   sortCompare(order) {
     return (a, b) => {
       if (a.data === null) {
-        a.data = "";
+        a.data = '';
       }
       if (b.data === null) {
-        b.data = "";
+        b.data = '';
       }
       return (
-        (typeof a.data.localeCompare === "function" ? a.data.localeCompare(b.data) : a.data - b.data) *
-        (order === "asc" ? -1 : 1)
+        (typeof a.data.localeCompare === 'function' ? a.data.localeCompare(b.data) : a.data - b.data) *
+        (order === 'asc' ? -1 : 1)
       );
     };
   }
@@ -975,9 +971,9 @@ class MUIDataTable extends React.Component {
 
     for (let i = 0; i < sortedData.length; i++) {
       const row = sortedData[i];
-      tableData.push({index: row.position, data: row.rowData});
+      tableData.push({ index: row.position, data: row.rowData });
       if (row.rowSelected) {
-        selectedRows.push({index: i, dataIndex: data[row.position].index});
+        selectedRows.push({ index: i, dataIndex: data[row.position].index });
       }
     }
 
@@ -997,20 +993,20 @@ class MUIDataTable extends React.Component {
   };
 
   render() {
-    const {classes, title} = this.props;
+    const { classes, title } = this.props;
     const {
-            announceText,
-            activeColumn,
-            data,
-            displayData,
-            columns,
-            page,
-            filterData,
-            filterList,
-            selectedRows,
-            expandedRows,
-            searchText,
-          } = this.state;
+      announceText,
+      activeColumn,
+      data,
+      displayData,
+      columns,
+      page,
+      filterData,
+      filterList,
+      selectedRows,
+      expandedRows,
+      searchText,
+    } = this.state;
 
     const rowCount = this.options.count || displayData.length;
     const rowsPerPage = this.options.pagination ? this.state.rowsPerPage : displayData.length;
@@ -1026,25 +1022,25 @@ class MUIDataTable extends React.Component {
             selectRowUpdate={this.selectRowUpdate}
           />
         ) : (
-           <TableToolbar
-             columns={columns}
-             displayData={displayData}
-             data={data}
-             filterData={filterData}
-             filterList={filterList}
-             filterUpdate={this.filterUpdate}
-             options={this.options}
-             resetFilters={this.resetFilters}
-             searchTextUpdate={this.searchTextUpdate}
-             tableRef={this.getTableContentRef}
-             title={title}
-             toggleViewColumn={this.toggleViewColumn}
-             setTableAction={this.setTableAction}
-           />
-         )}
-        <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate}/>
+          <TableToolbar
+            columns={columns}
+            displayData={displayData}
+            data={data}
+            filterData={filterData}
+            filterList={filterList}
+            filterUpdate={this.filterUpdate}
+            options={this.options}
+            resetFilters={this.resetFilters}
+            searchTextUpdate={this.searchTextUpdate}
+            tableRef={this.getTableContentRef}
+            title={title}
+            toggleViewColumn={this.toggleViewColumn}
+            setTableAction={this.setTableAction}
+          />
+        )}
+        <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate} />
         <div
-          style={{position: 'relative'}}
+          style={{ position: 'relative' }}
           className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>
           {this.options.resizableColumns && (
             <TableResize
@@ -1102,4 +1098,4 @@ class MUIDataTable extends React.Component {
   }
 }
 
-export default withStyles(defaultTableStyles, {name: 'MUIDataTable'})(MUIDataTable);
+export default withStyles(defaultTableStyles, { name: 'MUIDataTable' })(MUIDataTable);

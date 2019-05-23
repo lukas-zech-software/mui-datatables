@@ -12,9 +12,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
-import {withStyles} from '@material-ui/core/styles';
-import {TextField} from '@material-ui/core';
-import {getFilterListValue} from "../utils";
+import { withStyles } from '@material-ui/core/styles';
+import { TextField } from '@material-ui/core';
+import { getFilterListValue } from '../utils';
 
 export const defaultFilterStyles = theme => ({
   root: {
@@ -136,7 +136,7 @@ class TableFilter extends React.PureComponent {
   };
 
   handleDropdownChange = (index, value) => {
-    const v = value === this.props.options.textLabels.filter.all ? "" : value;
+    const v = value === this.props.options.textLabels.filter.all ? '' : value;
     this.props.onFilterUpdate(index, v, 'dropdown');
   };
 
@@ -149,7 +149,7 @@ class TableFilter extends React.PureComponent {
   };
 
   renderCheckbox(columns) {
-    const {classes, filterData, filterList} = this.props;
+    const { classes, filterData, filterList } = this.props;
 
     return columns.map((column, index) =>
       column.filter ? (
@@ -189,7 +189,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderSelectItem(column, index) {
-    const {classes, filterData, filterList, options} = this.props;
+    const { classes, filterData, filterList, options } = this.props;
     const textLabels = options.textLabels.filter;
     const filterValues = filterList[index].map(getFilterListValue);
 
@@ -208,13 +208,13 @@ class TableFilter extends React.PureComponent {
           value={filterValues.toString() || textLabels.all}
           name={column.name}
           onChange={event => this.handleDropdownChange(index, event.target.value)}
-          input={<Input name={column.name} id={column.name}/>}>
+          input={<Input name={column.name} id={column.name} />}>
           <MenuItem value={textLabels.all} key={0}>
             {textLabels.all}
           </MenuItem>
           {filterData[index].map((filterColumn, filterIndex) => (
             <MenuItem value={filterColumn} key={filterIndex + 1}>
-              {filterColumn !== null ? filterColumn.toString() : ""}
+              {filterColumn !== null ? filterColumn.toString() : ''}
             </MenuItem>
           ))}
         </Select>
@@ -223,7 +223,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderSelect(columns) {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <div className={classes.selectRoot}>
@@ -233,7 +233,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderTextField(columns) {
-    const {classes, filterList} = this.props;
+    const { classes, filterList } = this.props;
 
     return (
       <div className={classes.textFieldRoot}>
@@ -255,7 +255,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderMultiselectItem(column, index) {
-    const {classes, filterData, filterList} = this.props;
+    const { classes, filterData, filterList } = this.props;
     const filterValues = filterList[index].map(getFilterListValue);
 
     if (column.customFilterRender) {
@@ -272,10 +272,10 @@ class TableFilter extends React.PureComponent {
         <Select
           multiple
           value={filterValues || []}
-          renderValue={selected => selected.join(", ")}
+          renderValue={selected => selected.join(', ')}
           name={column.name}
           onChange={event => this.handleMultiselectChange(index, event.target.value)}
-          input={<Input name={column.name} id={column.name}/>}>
+          input={<Input name={column.name} id={column.name} />}>
           {filterData[index].map((filterColumn, filterIndex) => (
             <MenuItem value={filterColumn} key={filterIndex + 1}>
               <Checkbox
@@ -287,7 +287,7 @@ class TableFilter extends React.PureComponent {
                   checked: classes.checked,
                 }}
               />
-              <ListItemText primary={filterColumn}/>
+              <ListItemText primary={filterColumn} />
             </MenuItem>
           ))}
         </Select>
@@ -296,7 +296,7 @@ class TableFilter extends React.PureComponent {
   }
 
   renderMultiselect(columns) {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <div className={classes.selectRoot}>
@@ -307,11 +307,11 @@ class TableFilter extends React.PureComponent {
 
   renderFilters(type, columns) {
     switch (type) {
-      case "checkbox":
+      case 'checkbox':
         return this.renderCheckbox(columns);
-      case "multiselect":
+      case 'multiselect':
         return this.renderMultiselect(columns);
-      case "textField":
+      case 'textField':
         return this.renderTextField(columns);
       default:
         return this.renderSelect(columns);
@@ -319,7 +319,7 @@ class TableFilter extends React.PureComponent {
   }
 
   render() {
-    const {classes, columns, options, onFilterReset} = this.props;
+    const { classes, columns, options, onFilterReset } = this.props;
     const textLabels = options.textLabels.filter;
 
     return (
@@ -343,7 +343,7 @@ class TableFilter extends React.PureComponent {
               {textLabels.reset}
             </Button>
           </div>
-          <div className={classes.filtersSelected}/>
+          <div className={classes.filtersSelected} />
         </div>
         {this.renderFilters(options.filterType, columns)}
       </div>
@@ -351,4 +351,4 @@ class TableFilter extends React.PureComponent {
   }
 }
 
-export default withStyles(defaultFilterStyles, {name: 'MUIDataTableFilter'})(TableFilter);
+export default withStyles(defaultFilterStyles, { name: 'MUIDataTableFilter' })(TableFilter);
