@@ -735,12 +735,13 @@ class MUIDataTable extends React.Component {
     this.setState(
       prevState => {
         const filterList = cloneDeep(prevState.filterList);
-        const filterPos = filterList[index].findIndex(x => x && x.props.rawValue === filterValue);
+        const filterPos = filterList[index].findIndex(x => x && isEqual(x.props.rawValue, filterValue));
 
         const columnOptions = this.props.columns[index].options;
 
-        const renderFilterValue = value =>
-          columnOptions.customFilterValueRender ? columnOptions.customFilterValueRender(value) : value;
+        const renderFilterValue = value => {
+          return columnOptions.customFilterValueRender ? columnOptions.customFilterValueRender(value) : value;
+        };
         const isFilterEmpty = !filterValue;
 
         switch (type) {
