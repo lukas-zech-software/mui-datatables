@@ -8,13 +8,7 @@ class Example extends React.Component {
   render() {
 
     const columns = [
-      {
-        name: "Name",
-        options: {
-          filter: false,
-          sort: true,
-        }
-      },
+      // A column in the current configuration object api
       {
         name: "Birthday",
         options: {
@@ -46,50 +40,32 @@ class Example extends React.Component {
             );
           },
         }
-      },
-      {
-        name: "Company",
-        options: {
-          filter: true,
-          sort: false,
-        }
-      },
-      {
-        name: "City",
-        options: {
-          filter: true,
-          sort: false,
-        }
-      },
-      {
-        name: "State",
-        options: {
-          filter: true,
-          sort: false,
-        }
-      },
-    ];
-
-    const data = [
-      ["Joe James", 1543941056517, "Test Corp", "Yonkers", "NY"],
-      ["John Walsh", 1503541556517, "Test Corp", "Hartford", "CT"],
-      ["Bob Herm", 1000041556517, "Test Corp", "Tampa", "FL"],
-      ["James Houston", 800041556517, "Test Corp", "Dallas", "TX"],
-    ];
-
-    const options = {
-      filter: true,
-      filterType: 'dropdown',
-      responsive: 'stacked',
-      customSort: (data, colIndex, order) => {
-        return data.sort((a, b) => {
-          return a.data[colIndex].length > b.data[colIndex].length * (order === "asc" ? -1 : 1);
-        });
       }
-    };
+    ];
 
     return (
-      <MUIDataTable title={"Survey Scores"} data={data} columns={columns} options={options}/>
+      <MUIDataTable>
+        {/*This describes the same column as above as React component*/}
+        <MUIDataTableColumn
+          name="Birthday"
+          filter
+          sort
+          // Its possible to reuse the internal components for own components
+          Cell={(x) => <MUIDataTableCell>{new Date(x).toISOString()}</MUIDataTableCell>}
+          FilterValue={(x) => <b>{new Date(x).toISOString()}</b>}
+          FilterControl={(filterValues, onChange, className) => (
+            <TextField
+              id="Birthday"
+              key="Birthday"
+              label="Birthday"
+              className={className}
+              type="date"
+              value={filterValues[0] || "1995-05-01"}
+              onChange={(e) => onChange([e.target.value])}
+            />
+          )}
+        />
+      </MUIDataTable>
     );
 
   }
