@@ -177,6 +177,7 @@ class TableToolbar extends React.Component {
             <Tooltip title={print}>
               <span>
                 <ReactToPrint
+                  closeAfterPrint={false}
                   bodyClass={options.printBodyClass || ''}
                   trigger={() => (
                     <IconButton aria-label={print} classes={{root: classes.icon}}>

@@ -17,7 +17,13 @@ import {withStyles} from '@material-ui/core/styles';
 import {buildMap, getCollatorComparator, getFilterListValue, sortCompare} from './utils';
 
 const defaultTableStyles = {
-  root: {},
+  toolbar: {
+    '@media print': {
+      '& svg': {
+        display: 'none',
+      }
+    },
+  },
   tableRoot: {
     outline: 'none',
   },
@@ -26,6 +32,9 @@ const defaultTableStyles = {
     overflow: 'auto',
     height: '100%',
     maxHeight: '499px',
+    '@media print': {
+      maxHeight: 'auto',
+    },
   },
   caption: {
     position: 'absolute',
@@ -506,7 +515,7 @@ class MUIDataTable extends React.Component {
   }
 
   hasSearchText = (toSearch = '', toFind = '', caseSensitive) => {
-      let stack = toSearch.toString();
+    let stack = toSearch.toString();
     let needle = toFind.toString();
 
     if (!caseSensitive) {
@@ -746,7 +755,7 @@ class MUIDataTable extends React.Component {
         const isFilterEmpty = !filterValue;
 
         switch (type) {
-          case "checkbox": {
+          case 'checkbox': {
             const wrappedValue = React.createElement(FilterValue, {
               children: renderFilterValue(filterValue),
               // attach the raw input value, so we can retrieve it later
@@ -1021,6 +1030,7 @@ class MUIDataTable extends React.Component {
       <Paper elevation={this.options.elevation} ref={this.tableContent} className={classes.paper}>
         {selectedRows.data.length ? (
           <TableToolbarSelect
+            classes={{root:classes.toolbar}}
             options={this.options}
             selectedRows={selectedRows}
             onRowsDelete={this.selectRowDelete}
@@ -1029,6 +1039,7 @@ class MUIDataTable extends React.Component {
           />
         ) : (
            <TableToolbar
+             classes={{root:classes.toolbar}}
              columns={columns}
              displayData={displayData}
              data={data}
