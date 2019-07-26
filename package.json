@@ -98,7 +98,7 @@
     "lodash.memoize": "^4.1.2",
     "lodash.merge": "^4.6.2",
     "prop-types": "^15.7.2",
-    "react-to-print": "^1.0.10"
+    "rc-print": "^1.0.4"
   },
   "side-effects": false,
   "nyc": {

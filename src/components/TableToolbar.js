@@ -12,7 +12,6 @@ import DownloadIcon from '@material-ui/icons/CloudDownload';
 import PrintIcon from '@material-ui/icons/Print';
 import ViewColumnIcon from '@material-ui/icons/ViewColumn';
 import FilterIcon from '@material-ui/icons/FilterList';
-import ReactToPrint from 'react-to-print';
 import styled from '../styled';
 import { createCSVDownload } from '../utils';
 
@@ -176,15 +175,10 @@ class TableToolbar extends React.Component {
           {options.print && (
             <Tooltip title={print}>
               <span>
-                <ReactToPrint
-                  bodyClass={options.printBodyClass || ''}
-                  trigger={() => (
-                    <IconButton aria-label={print} classes={{ root: classes.icon }}>
-                      <PrintIcon />
-                    </IconButton>
-                  )}
-                  content={() => this.props.tableRef()}
-                />
+               <IconButton aria-label={print} classes={{root: classes.icon}}
+                           onClick={() => this.props.tableRef().onPrint()}>
+                  <PrintIcon/>
+                </IconButton>
               </span>
             </Tooltip>
           )}
