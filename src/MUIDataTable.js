@@ -742,7 +742,8 @@ class MUIDataTable extends React.Component {
         const isFilterEmpty = !filterValue;
 
         switch (type) {
-          case 'checkbox': {
+          case 'checkbox':
+            {
               const wrappedValue = React.createElement(FilterValue, {
                 children: renderFilterValue(filterValue),
                 // attach the raw input value, so we can retrieve it later
@@ -1018,44 +1019,44 @@ class MUIDataTable extends React.Component {
         <React.Fragment>
           {selectedRows.data.length ? (
             <TableToolbarSelect
-              classes={{root: classes.toolbar}}
-            options={this.options}
-            selectedRows={selectedRows}
-            onRowsDelete={this.selectRowDelete}
-            displayData={displayData}
-            selectRowUpdate={this.selectRowUpdate}
-          />
-        ) : (
-          <TableToolbar
-               classes={{root: classes.toolbar}}
-            columns={columns}
-            displayData={displayData}
-            data={data}
-            filterData={filterData}
-            filterList={filterList}
-            filterUpdate={this.filterUpdate}
-            options={this.options}
-            resetFilters={this.resetFilters}
-            searchTextUpdate={this.searchTextUpdate}
-            tableRef={this.getTableContentRef}
-            title={title}
-            toggleViewColumn={this.toggleViewColumn}
-            setTableAction={this.setTableAction}
-          />
-        )}
-        <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate} />
-          <Print ref={this.tableContent}>
-            <React.Fragment>
-        <div
-          style={{ position: 'relative' }}
-          className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>
-          {this.options.resizableColumns && (
-            <TableResize
-              key={rowCount}
-              updateDividers={fn => (this.updateDividers = fn)}
-              setResizeable={fn => (this.setHeadResizeable = fn)}
+              classes={{ root: classes.toolbar }}
+              options={this.options}
+              selectedRows={selectedRows}
+              onRowsDelete={this.selectRowDelete}
+              displayData={displayData}
+              selectRowUpdate={this.selectRowUpdate}
+            />
+          ) : (
+            <TableToolbar
+              classes={{ root: classes.toolbar }}
+              columns={columns}
+              displayData={displayData}
+              data={data}
+              filterData={filterData}
+              filterList={filterList}
+              filterUpdate={this.filterUpdate}
+              options={this.options}
+              resetFilters={this.resetFilters}
+              searchTextUpdate={this.searchTextUpdate}
+              tableRef={this.getTableContentRef}
+              title={title}
+              toggleViewColumn={this.toggleViewColumn}
+              setTableAction={this.setTableAction}
             />
           )}
+          <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate} />
+          <Print ref={this.tableContent}>
+            <React.Fragment>
+              <div
+                style={{ position: 'relative' }}
+                className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>
+                {this.options.resizableColumns && (
+                  <TableResize
+                    key={rowCount}
+                    updateDividers={fn => (this.updateDividers = fn)}
+                    setResizeable={fn => (this.setHeadResizeable = fn)}
+                  />
+                )}
 
                 <MuiTable ref={el => (this.tableRef = el)} tabIndex={'0'} role={'grid'} className={classes.tableRoot}>
                   <caption className={classes.caption}>{title}</caption>

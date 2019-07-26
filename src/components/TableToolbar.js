@@ -175,9 +175,11 @@ class TableToolbar extends React.Component {
           {options.print && (
             <Tooltip title={print}>
               <span>
-               <IconButton aria-label={print} classes={{root: classes.icon}}
-                           onClick={() => this.props.tableRef().onPrint()}>
-                  <PrintIcon/>
+                <IconButton
+                  aria-label={print}
+                  classes={{ root: classes.icon }}
+                  onClick={() => this.props.tableRef().onPrint()}>
+                  <PrintIcon />
                 </IconButton>
               </span>
             </Tooltip>
