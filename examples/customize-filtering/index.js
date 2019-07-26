@@ -122,6 +122,7 @@ class Example extends React.Component {
       ["James Houston", 800041556517, "Test Corp", "Dallas", "TX"],
       ["James Houston", 800041556517, "Test Corp", "Dallas", "TX"],
     ];
+      data.forEach((x,i) => x[0]+=i);
 
     const options = {
       filter: true,

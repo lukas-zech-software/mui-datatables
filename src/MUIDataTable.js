@@ -15,6 +15,7 @@ import isEqual from 'lodash.isequal';
 import textLabels from './textLabels';
 import {withStyles} from '@material-ui/core/styles';
 import {buildMap, getCollatorComparator, getFilterListValue, sortCompare} from './utils';
+import Print from 'rc-print';
 
 const defaultTableStyles = {
   toolbar: {
@@ -33,7 +34,7 @@ const defaultTableStyles = {
     height: '100%',
     maxHeight: '499px',
     '@media print': {
-      maxHeight: 'auto',
+      maxHeight: '1000000px',
     },
   },
   caption: {
@@ -1027,89 +1028,96 @@ class MUIDataTable extends React.Component {
     const rowsPerPage = this.options.pagination ? this.state.rowsPerPage : displayData.length;
 
     return (
-      <Paper elevation={this.options.elevation} ref={this.tableContent} className={classes.paper}>
-        {selectedRows.data.length ? (
-          <TableToolbarSelect
-            classes={{root:classes.toolbar}}
-            options={this.options}
-            selectedRows={selectedRows}
-            onRowsDelete={this.selectRowDelete}
-            displayData={displayData}
-            selectRowUpdate={this.selectRowUpdate}
-          />
-        ) : (
-           <TableToolbar
-             classes={{root:classes.toolbar}}
-             columns={columns}
-             displayData={displayData}
-             data={data}
-             filterData={filterData}
-             filterList={filterList}
-             filterUpdate={this.filterUpdate}
-             options={this.options}
-             resetFilters={this.resetFilters}
-             searchTextUpdate={this.searchTextUpdate}
-             tableRef={this.getTableContentRef}
-             title={title}
-             toggleViewColumn={this.toggleViewColumn}
-             setTableAction={this.setTableAction}
-           />
-         )}
-        <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate}/>
-        <div
-          style={{position: 'relative'}}
-          className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>
-          {this.options.resizableColumns && (
-            <TableResize
-              key={rowCount}
-              updateDividers={fn => (this.updateDividers = fn)}
-              setResizeable={fn => (this.setHeadResizeable = fn)}
-            />
-          )}
-          <MuiTable ref={el => (this.tableRef = el)} tabIndex={'0'} role={'grid'} className={classes.tableRoot}>
-            <caption className={classes.caption}>{title}</caption>
-            <TableHead
-              columns={columns}
-              activeColumn={activeColumn}
-              data={displayData}
-              count={rowCount}
-              columns={columns}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              handleHeadUpdateRef={fn => (this.updateToolbarSelect = fn)}
-              selectedRows={selectedRows}
-              selectRowUpdate={this.selectRowUpdate}
-              toggleSort={this.toggleSortColumn}
-              setCellRef={this.setHeadCellRef}
+      <Paper elevation={this.options.elevation} className={classes.paper}>
+        <React.Fragment>
+          {selectedRows.data.length ? (
+            <TableToolbarSelect
+              classes={{root: classes.toolbar}}
               options={this.options}
-            />
-            <TableBody
-              data={displayData}
-              count={rowCount}
-              columns={columns}
-              page={page}
-              rowsPerPage={rowsPerPage}
               selectedRows={selectedRows}
+              onRowsDelete={this.selectRowDelete}
+              displayData={displayData}
               selectRowUpdate={this.selectRowUpdate}
-              expandedRows={expandedRows}
-              toggleExpandRow={this.toggleExpandRow}
-              options={this.options}
-              searchText={searchText}
-              filterList={filterList}
             />
-          </MuiTable>
-        </div>
-        <TableFooter
-          options={this.options}
-          page={page}
-          rowCount={rowCount}
-          rowsPerPage={rowsPerPage}
-          changeRowsPerPage={this.changeRowsPerPage}
-          changePage={this.changePage}
-        />
-        <div className={classes.liveAnnounce} aria-live={'polite'} ref={el => (this.announceRef = el)}>
-          {announceText}
-        </div>
+          ) : (
+             <TableToolbar
+               classes={{root: classes.toolbar}}
+               columns={columns}
+               displayData={displayData}
+               data={data}
+               filterData={filterData}
+               filterList={filterList}
+               filterUpdate={this.filterUpdate}
+               options={this.options}
+               resetFilters={this.resetFilters}
+               searchTextUpdate={this.searchTextUpdate}
+               tableRef={this.getTableContentRef}
+               title={title}
+               toggleViewColumn={this.toggleViewColumn}
+               setTableAction={this.setTableAction}
+             />
+           )}
+          <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate}/>
+          <Print ref={this.tableContent}>
+            <React.Fragment>
+              <div
+                style={{position: 'relative'}}
+                className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>
+                {this.options.resizableColumns && (
+                  <TableResize
+                    key={rowCount}
+                    updateDividers={fn => (this.updateDividers = fn)}
+                    setResizeable={fn => (this.setHeadResizeable = fn)}
+                  />
+                )}
+
+                <MuiTable ref={el => (this.tableRef = el)} tabIndex={'0'} role={'grid'} className={classes.tableRoot}>
+                  <caption className={classes.caption}>{title}</caption>
+                  <TableHead
+                    columns={columns}
+                    activeColumn={activeColumn}
+                    data={displayData}
+                    count={rowCount}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    handleHeadUpdateRef={fn => (this.updateToolbarSelect = fn)}
+                    selectedRows={selectedRows}
+                    selectRowUpdate={this.selectRowUpdate}
+                    toggleSort={this.toggleSortColumn}
+                    setCellRef={this.setHeadCellRef}
+                    options={this.options}
+                  />
+                  <TableBody
+                    data={displayData}
+                    count={rowCount}
+                    columns={columns}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    selectedRows={selectedRows}
+                    selectRowUpdate={this.selectRowUpdate}
+                    expandedRows={expandedRows}
+                    toggleExpandRow={this.toggleExpandRow}
+                    options={this.options}
+                    searchText={searchText}
+                    filterList={filterList}
+                  />
+                </MuiTable>
+              </div>
+              <TableFooter
+                options={this.options}
+                page={page}
+                rowCount={rowCount}
+                rowsPerPage={rowsPerPage}
+                changeRowsPerPage={this.changeRowsPerPage}
+                changePage={this.changePage}
+              />
+            </React.Fragment>
+          </Print>
+
+          <div className={classes.liveAnnounce} aria-live={'polite'} ref={el => (this.announceRef = el)}>
+            {announceText}
+          </div>
+        </React.Fragment>
       </Paper>
     );
   }
