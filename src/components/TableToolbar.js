@@ -14,7 +14,7 @@ import ViewColumnIcon from '@material-ui/icons/ViewColumn';
 import FilterIcon from '@material-ui/icons/FilterList';
 import ReactToPrint from 'react-to-print';
 import styled from '../styled';
-import { createCSVDownload } from '../utils';
+import {createCSVDownload} from '../utils';
 
 export const defaultToolbarStyles = (theme, props) => ({
   root: {},
@@ -40,7 +40,7 @@ export const defaultToolbarStyles = (theme, props) => ({
     marginTop: '10px',
     marginRight: '8px',
   },
-  ...(props.options.responsive ? { ...responsiveToolbarStyles(theme) } : {}),
+  ...(props.options.responsive ? {...responsiveToolbarStyles(theme)} : {}),
 });
 
 export const responsiveToolbarStyles = theme => ({
@@ -85,7 +85,7 @@ class TableToolbar extends React.Component {
   };
 
   handleCSVDownload = () => {
-    const { data, columns, options } = this.props;
+    const {data, columns, options} = this.props;
     createCSVDownload(columns, data, options);
   };
 
@@ -107,9 +107,11 @@ class TableToolbar extends React.Component {
   };
 
   hideSearch = () => {
-    const { onSearchClose } = this.props.options;
+    const {onSearchClose} = this.props.options;
 
-    if (onSearchClose) onSearchClose();
+    if (onSearchClose) {
+      onSearchClose();
+    }
     this.props.searchTextUpdate(null);
 
     this.setState(() => ({
@@ -122,35 +124,35 @@ class TableToolbar extends React.Component {
 
   render() {
     const {
-      data,
-      options,
-      classes,
-      columns,
-      filterData,
-      filterList,
-      filterUpdate,
-      resetFilters,
-      searchTextUpdate,
-      toggleViewColumn,
-      title,
-      tableRef,
-    } = this.props;
+            data,
+            options,
+            classes,
+            columns,
+            filterData,
+            filterList,
+            filterUpdate,
+            resetFilters,
+            searchTextUpdate,
+            toggleViewColumn,
+            title,
+            tableRef,
+          } = this.props;
 
-    const { search, downloadCsv, print, viewColumns, filterTable } = options.textLabels.toolbar;
-    const { showSearch } = this.state;
+    const {search, downloadCsv, print, viewColumns, filterTable} = options.textLabels.toolbar;
+    const {showSearch} = this.state;
 
     return (
       <Toolbar className={classes.root} role={'toolbar'} aria-label={'Table Toolbar'}>
         <div className={classes.left}>
           {showSearch === true ? (
-            <TableSearch onSearch={searchTextUpdate} onHide={this.hideSearch} options={options} />
+            <TableSearch onSearch={searchTextUpdate} onHide={this.hideSearch} options={options}/>
           ) : (
-            <div className={classes.titleRoot} aria-hidden={'true'}>
-              <Typography variant="h6" className={classes.titleText}>
-                {title}
-              </Typography>
-            </div>
-          )}
+             <div className={classes.titleRoot} aria-hidden={'true'}>
+               <Typography variant="h6" className={classes.titleText}>
+                 {title}
+               </Typography>
+             </div>
+           )}
         </div>
         <div className={classes.actions}>
           {options.search && (
@@ -158,16 +160,16 @@ class TableToolbar extends React.Component {
               <IconButton
                 aria-label={search}
                 buttonRef={el => (this.searchButton = el)}
-                classes={{ root: this.getActiveIcon(classes, 'search') }}
+                classes={{root: this.getActiveIcon(classes, 'search')}}
                 onClick={this.setActiveIcon.bind(null, 'search')}>
-                <SearchIcon />
+                <SearchIcon/>
               </IconButton>
             </Tooltip>
           )}
           {options.download && (
             <Tooltip title={downloadCsv}>
-              <IconButton aria-label={downloadCsv} classes={{ root: classes.icon }} onClick={this.handleCSVDownload}>
-                <DownloadIcon />
+              <IconButton aria-label={downloadCsv} classes={{root: classes.icon}} onClick={this.handleCSVDownload}>
+                <DownloadIcon/>
               </IconButton>
             </Tooltip>
           )}
@@ -175,9 +177,10 @@ class TableToolbar extends React.Component {
             <Tooltip title={print}>
               <span>
                 <ReactToPrint
+                  bodyClass={options.printBodyClass || ''}
                   trigger={() => (
-                    <IconButton aria-label={print} classes={{ root: classes.icon }}>
-                      <PrintIcon />
+                    <IconButton aria-label={print} classes={{root: classes.icon}}>
+                      <PrintIcon/>
                     </IconButton>
                   )}
                   content={() => this.props.tableRef()}
@@ -192,15 +195,15 @@ class TableToolbar extends React.Component {
               trigger={
                 <IconButton
                   aria-label={viewColumns}
-                  classes={{ root: this.getActiveIcon(classes, 'viewcolumns') }}
+                  classes={{root: this.getActiveIcon(classes, 'viewcolumns')}}
                   onClick={this.setActiveIcon.bind(null, 'viewcolumns')}>
                   <Tooltip title={viewColumns}>
-                    <ViewColumnIcon />
+                    <ViewColumnIcon/>
                   </Tooltip>
                 </IconButton>
               }
               content={
-                <TableViewCol data={data} columns={columns} options={options} onColumnUpdate={toggleViewColumn} />
+                <TableViewCol data={data} columns={columns} options={options} onColumnUpdate={toggleViewColumn}/>
               }
             />
           )}
@@ -211,10 +214,10 @@ class TableToolbar extends React.Component {
               trigger={
                 <IconButton
                   aria-label={filterTable}
-                  classes={{ root: this.getActiveIcon(classes, 'filter') }}
+                  classes={{root: this.getActiveIcon(classes, 'filter')}}
                   onClick={this.setActiveIcon.bind(null, 'filter')}>
                   <Tooltip title={filterTable}>
-                    <FilterIcon />
+                    <FilterIcon/>
                   </Tooltip>
                 </IconButton>
               }
@@ -237,4 +240,4 @@ class TableToolbar extends React.Component {
   }
 }
 
-export default styled(TableToolbar)(defaultToolbarStyles, { name: 'MUIDataTableToolbar' });
+export default styled(TableToolbar)(defaultToolbarStyles, {name: 'MUIDataTableToolbar'});

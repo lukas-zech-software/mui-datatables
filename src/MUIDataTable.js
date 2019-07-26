@@ -110,6 +110,7 @@ class MUIDataTable extends React.Component {
       customSort: PropTypes.func,
       search: PropTypes.bool,
       print: PropTypes.bool,
+      printBodyClass: PropTypes.string,
       viewColumns: PropTypes.bool,
       download: PropTypes.bool,
       downloadOptions: PropTypes.shape({
